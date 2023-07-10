@@ -7,25 +7,37 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use  App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
+
+
+
 
 class UserController extends Controller
 {
-    public function Insertar(Request $request){
-        $p = new User;
+    public function Register(Request $request){
+        $u = new User();
+        $u -> nombre = $request -> post("nombre");
+        $u -> correo = $request -> post("correo");
+        $u -> contraseña = Hash::make($request -> post("contraseña"));
 
-        $p -> nombre = $request -> post("nombre");
-        $p -> correo = $request -> post("correo");
+        $u -> save();
 
-        $p -> save();
+        return redirect("/login")-> with("created",true);
 
-        return view("formularioUsuario",[
-            "creado" => true
-        ]);
     }
-    public function Listar(Request $request){
-        $personas = User::all();
-        return view("listarPersonas",[
-            "personas" => $personas
-        ]);
-}
+
+    public function Login(Request $request){
+        $credentials = $request->only('correo', 'contraseña');
+        if (Auth::attempt($credentials)) 
+            return redirect("/");
+        return redirect("/login")->with("failed",true);
+    }
+
+    public function Logout(Request $request){
+        Auth::logout();
+        return redirect("/login")->with("logout",true);
+    }
+  
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("Cuerpo");
             $table->string("Autor");
             $table->unsignedBigInteger('id_Autor');
-            $table->foreign("id_Autor")->references("id")->on("users");
+            $table->foreign("id_Autor")->references("id")->on("user");
             $table->softDeletes();
             $table->timestamps();
         });
