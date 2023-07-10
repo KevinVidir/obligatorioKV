@@ -13,10 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string("nombre");
-            $table->string("correo");
+        Schema::create('Post', function (Blueprint $table) {
+        $table->id();
+            $table->string("Titulo");
+            $table->string("Cuerpo");
+            $table->string("Autor");
+            $table->unsignedBigInteger('id_Autor');
+            $table->foreign("id_Autor")->references("id")->on("users");
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        //
     }
 };
